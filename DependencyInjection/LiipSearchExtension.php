@@ -94,7 +94,7 @@ class LiipSearchExtension extends Extension
                 $container->setParameter($this->getAlias().'.bing_web_search.'.$key, $value);
             }
             $backend = true;
-            // $loader->load('google_rest.xml');
+            $loader->load('bing_web_search.xml');
             if (empty($factory)) {
                 $factory = 'liip_search.bing_web_search.factory';
             }
