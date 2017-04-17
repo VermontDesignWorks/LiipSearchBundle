@@ -19,11 +19,40 @@ use Pagerfanta\Pagerfanta;
  */
 class BingWebSearchFactory implements SearchFactoryInterface
 {
+    /**
+     * Bing Web Search API Key
+     * 
+     * @var string
+     */
     private $apiKey;
+
+    /**
+     * Bing Web Search API Base URL
+     * 
+     * @var string
+     */
     private $apiUrl;
+
+    /**
+     * Maximum number of results to show per page
+     * 
+     * @var string
+     */
     private $maxPerPage;
+
+    /**
+     * Which domains should the results be restricted to
+     * 
+     * @var string[]|array
+     */
     private $restrictToSites = [];
 
+    /**
+     * @param string $apiKey 
+     * @param string $apiUrl 
+     * @param int $maxPerPage 
+     * @param string[]|array $restrictToSites 
+     */
     public function __construct($apiKey, $apiUrl, $maxPerPage, array $restrictToSites = [])
     {
         $this->apiKey = $apiKey;
@@ -32,6 +61,9 @@ class BingWebSearchFactory implements SearchFactoryInterface
         $this->restrictToSites = $restrictToSites;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getPagerfanta($query, $lang)
     {
         $adapter = new BingWebSearchAdapter(
