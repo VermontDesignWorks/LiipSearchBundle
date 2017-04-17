@@ -65,12 +65,28 @@ class BingWebSearchAdapter implements AdapterInterface
      */
     public function getSlice($offset, $length)
     {
+        $results = $this->executeSearch($offset, $length);
+
+        // FIXME: Hopefully this doesnt hide errors
+        if (!array_key_exists('webPages', $results)) {
+            $this->totalResults = 0;
+
+            return [];
+        }
+
+        $this->totalResults = $results['webPages']['totalEstimatedMatches'];
+        
+        return $this->extractResults($results['webPages']['value']);
+    }
+
+    private function executeSearch($offset, $count)
+    {
         $url = sprintf(
             '%s?%s', 
             $this->apiUrl,
             http_build_query([
                 'mkt' => 'en-US',
-                'count' => $length,
+                'count' => $count,
                 'q' => $this->buildQuery(),
                 'offset' => $offset,
             ])
@@ -119,15 +135,15 @@ class BingWebSearchAdapter implements AdapterInterface
             );
         }
 
-        if (!array_key_exists('webPages', $responseData)) {
-            // FIXME: Hopefully this doesnt hide errors
-            $this->totalResults = 0;
+        return $responseData;
+    }
 
-            return [];
-        }
-
-        $this->totalResults = $responseData['webPages']['totalEstimatedMatches'];
-        
+    /**
+     * @param array $results 
+     * @return array
+     */
+    private function extractResults(array $results)
+    {
         return array_map(
             function (array $resultItemData) {
                 return [
@@ -138,7 +154,7 @@ class BingWebSearchAdapter implements AdapterInterface
                     'url' => $resultItemData['displayUrl'],
                 ];
             },
-            $responseData['webPages']['value']
+            $results
         );
     }
 
