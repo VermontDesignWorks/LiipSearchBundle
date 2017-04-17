@@ -154,6 +154,11 @@ class BingWebSearchAdapter implements AdapterInterface
         return $this->totalResults;
     }
 
+    /**
+     * Build the bing search query, including restricting to certain sites
+     * 
+     * @return string
+     */
     private function buildQuery()
     {
         if (empty($this->restrictToSites)) {
@@ -170,6 +175,13 @@ class BingWebSearchAdapter implements AdapterInterface
         );
     }
 
+    /**
+     * Bing web search doesnt provide an html snippet with search terms highlighted
+     * This method wraps b tags around any of the words from the query
+     * 
+     * @param string $text 
+     * @return string
+     */
     private function highlightKeywords($text)
     {
         $words = explode(' ', $this->query);
