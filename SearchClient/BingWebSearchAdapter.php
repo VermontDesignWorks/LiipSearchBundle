@@ -165,7 +165,7 @@ class BingWebSearchAdapter implements AdapterInterface
             '%s (site:%s)',
             $this->query,
             implode(
-                ' site:',
+                ' OR site:',
                 $this->restrictToSites
             )
         );
