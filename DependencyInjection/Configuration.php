@@ -83,6 +83,7 @@ class Configuration implements ConfigurationInterface
                             ->canBeEnabled()
                             ->children()
                                 ->scalarNode('api_key')->isRequired()->end()
+                                ->scalarNode('search_api_url')->defaultValue('https://api.cognitive.microsoft.com/bing/v5.0/search')->end()
                                 ->arrayNode('restrict_to_sites')
                                     ->prototype('scalar')->end()
                                 ->end()
