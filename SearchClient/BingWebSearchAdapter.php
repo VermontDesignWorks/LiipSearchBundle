@@ -136,7 +136,6 @@ class BingWebSearchAdapter implements AdapterInterface
                     'htmlSnippet' => $this->highlightKeywords($resultItemData['snippet']),
                     'snippet' => $resultItemData['snippet'],
                     'url' => $resultItemData['displayUrl'],
-                    // 'index' => $index,
                 ];
             },
             $responseData['webPages']['value']
