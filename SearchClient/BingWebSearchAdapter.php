@@ -132,6 +132,8 @@ class BingWebSearchAdapter implements AdapterInterface
             function (array $resultItemData) {
                 return [
                     'title' => $resultItemData['name'],
+                    'htmlTitle' => $this->highlightKeywords($resultItemData['name']),
+                    'htmlSnippet' => $this->highlightKeywords($resultItemData['snippet']),
                     'snippet' => $resultItemData['snippet'],
                     'url' => $resultItemData['displayUrl'],
                     // 'index' => $index,
@@ -167,5 +169,21 @@ class BingWebSearchAdapter implements AdapterInterface
                 $this->restrictToSites
             )
         );
+    }
+
+    private function highlightKeywords($text)
+    {
+        $words = explode(' ', $this->query);
+
+        $highlightedText = $text;
+        foreach ($words as $word) {
+            $highlightedText = preg_replace(
+                '/'.preg_quote($word).'/i',
+                '<b>$0</b>',
+                $highlightedText
+            );
+        }
+
+        return $highlightedText;
     }
 }
