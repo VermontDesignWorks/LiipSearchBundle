@@ -107,7 +107,7 @@ class BingWebSearchAdapter implements AdapterInterface
         curl_close($ch);
 
         if ($error['number'] !== 0) {
-            throw new \Exception(sprintf(
+            throw new SearchException(sprintf(
                 'Curl error %d: %s',
                 $error['number'],
                 $error['message']
@@ -115,14 +115,14 @@ class BingWebSearchAdapter implements AdapterInterface
         }
 
         if ($info['http_code'] !== 200) {
-            throw new \Exception(sprintf(
+            throw new SearchException(sprintf(
                 'Non-200 response: %s',
                 $info['http_code']
             ));
         }
 
         if (empty($response)) {
-            throw new \Exception(
+            throw new SearchException(
                 'Empty response with no curl error and status 200. This should never happen.'
             );
         }
@@ -130,7 +130,7 @@ class BingWebSearchAdapter implements AdapterInterface
         $responseData = json_decode($response, true);
 
         if (is_null($responseData)) {
-            throw new \Exception(
+            throw new SearchException(
                 'Failed to decode response json'
             );
         }
