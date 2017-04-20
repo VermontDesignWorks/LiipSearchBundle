@@ -52,17 +52,17 @@ class BingWebSearchAdapter implements AdapterInterface
     /**
      * @var int Current number of retries
      */
-    private $retryCount = 0;
+    private $retryCount;
 
     /**
      * @var int Number of seconds to delay before retry
      */
-    private $retryDelaySeconds = 1;
+    private $retryDelayMs;
 
     /**
      * @var int Maximum number of retries
      */
-    private $maxRetries = 3;
+    private $maxRetries;
 
     /**
      * @param string      $apiKey
@@ -71,13 +71,23 @@ class BingWebSearchAdapter implements AdapterInterface
      * @param array       $restrictToSites
      * @param int         $maxTimeoutMs
      */
-    public function __construct($apiKey, $apiUrl, $query, array $restrictToSites = [], $maxTimeoutMs = 2000)
+    public function __construct(
+        $apiKey,
+        $apiUrl,
+        $query,
+        array $restrictToSites = [],
+        $maxTimeoutMs = 1000,
+        $maxRetries = 3,
+        $retryDelayMs = 1000
+    )
     {
         $this->apiKey = $apiKey;
         $this->apiUrl = $apiUrl;
         $this->query = $query;
         $this->restrictToSites = $restrictToSites;
 		$this->maxTimeoutMs = $maxTimeoutMs;
+		$this->maxRetries = $maxRetries;
+		$this->retryDelayMs = $retryDelayMs;
     }
 
     /**
@@ -133,7 +143,7 @@ class BingWebSearchAdapter implements AdapterInterface
         if ($error['number'] === CURLE_OPERATION_TIMEDOUT && $this->retryCount < $this->maxRetries) {
             $this->retryCount++;
 
-            sleep($this->retryDelaySeconds);
+            usleep($this->retryDelayMs * 1000);
 
             return $this->executeSearch($offset, $count);
         }
