@@ -85,9 +85,9 @@ class BingWebSearchAdapter implements AdapterInterface
         $this->apiUrl = $apiUrl;
         $this->query = $query;
         $this->restrictToSites = $restrictToSites;
-		$this->maxTimeoutMs = $maxTimeoutMs;
-		$this->maxRetries = $maxRetries;
-		$this->retryDelayMs = $retryDelayMs;
+        $this->maxTimeoutMs = $maxTimeoutMs;
+        $this->maxRetries = $maxRetries;
+        $this->retryDelayMs = $retryDelayMs;
     }
 
     /**
