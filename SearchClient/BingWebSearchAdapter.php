@@ -200,8 +200,8 @@ class BingWebSearchAdapter implements AdapterInterface
                 return [
                     'title' => $resultItemData['name'],
                     'htmlTitle' => $this->highlightKeywords($resultItemData['name']),
-                    'htmlSnippet' => $this->highlightKeywords($resultItemData['snippet']),
                     'snippet' => $resultItemData['snippet'],
+                    'htmlSnippet' => $this->highlightKeywords($resultItemData['snippet']),
                     'url' => $this->addScheme($resultItemData['displayUrl']),
                 ];
             },
