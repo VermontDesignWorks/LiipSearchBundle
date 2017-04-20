@@ -140,7 +140,14 @@ class BingWebSearchAdapter implements AdapterInterface
         curl_close($ch);
 
         // Retry if there was a timeout
-        if ($error['number'] === CURLE_OPERATION_TIMEDOUT && $this->retryCount < $this->maxRetries) {
+        if ($error['number'] === CURLE_OPERATION_TIMEDOUT && $this->maxRetries) {
+
+            if ($this->retryCount === $this->maxRetries) {
+                $this->retryCount = 0;
+
+                throw new SearchException('Search timed out and all retries failed.');
+            }
+
             $this->retryCount++;
 
             usleep($this->retryDelayMs * 1000);
