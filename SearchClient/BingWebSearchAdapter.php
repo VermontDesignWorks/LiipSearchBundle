@@ -208,7 +208,7 @@ class BingWebSearchAdapter implements AdapterInterface
      */
     private function highlightKeywords($text)
     {
-        $words = explode(' ', $this->query);
+        $words = explode(' ', htmlspecialchars($this->query));
 
         $highlightedText = $text;
         foreach ($words as $word) {
