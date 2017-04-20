@@ -40,6 +40,11 @@ class BingWebSearchAdapter implements AdapterInterface
     private $restrictToSites = [];
 
     /**
+     * @var int Number of seconds to wait for api timeout
+     */
+    private $maxTimeoutMs;
+
+    /**
      * @var bool Number of results found.
      */
     private $totalResults = false;
@@ -48,14 +53,16 @@ class BingWebSearchAdapter implements AdapterInterface
      * @param string      $apiKey
      * @param string      $apiUrl
      * @param string      $query
-     * @param array $restrictToSites
+     * @param array       $restrictToSites
+     * @param int         $maxTimeoutMs
      */
-    public function __construct($apiKey, $apiUrl, $query, array $restrictToSites = [])
+    public function __construct($apiKey, $apiUrl, $query, array $restrictToSites = [], $maxTimeoutMs = 5000)
     {
         $this->apiKey = $apiKey;
         $this->apiUrl = $apiUrl;
         $this->query = $query;
         $this->restrictToSites = $restrictToSites;
+		$this->maxTimeoutMs = $maxTimeoutMs;
     }
 
     /**
@@ -97,6 +104,7 @@ class BingWebSearchAdapter implements AdapterInterface
             sprintf('Ocp-Apim-Subscription-Key: %s', $this->apiKey)
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->maxTimeoutMs);
 
         $response = curl_exec($ch);
         $info = curl_getinfo($ch);
