@@ -159,7 +159,7 @@ class BingWebSearchAdapter implements AdapterInterface
                     'htmlTitle' => $this->highlightKeywords($resultItemData['name']),
                     'htmlSnippet' => $this->highlightKeywords($resultItemData['snippet']),
                     'snippet' => $resultItemData['snippet'],
-                    'url' => $resultItemData['displayUrl'],
+                    'url' => $this->addScheme($resultItemData['displayUrl']),
                 ];
             },
             $results
@@ -220,5 +220,23 @@ class BingWebSearchAdapter implements AdapterInterface
         }
 
         return $highlightedText;
+    }
+
+    /**
+     * Add scheme to url if it doesnt hae one
+     * 
+     * @param string $url 
+     * @param string $scheme
+     * @return string
+     */
+    private function addScheme($url, $scheme = 'http://')
+    {
+        if (empty($url)) {
+            throw new \InvalidArgumentException('Cannot add scheme to an empty url.');
+        }
+
+        return (parse_url($url, PHP_URL_SCHEME) === null)
+            ? $scheme . $url
+            : $url;
     }
 }
